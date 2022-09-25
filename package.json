@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "tsc-watch --onSuccess \"node ./dist/src/app.js\"",
-    "server": "lite-server"
+    "server": "lite-server \"npm start\""
   },
   "keywords": [],
   "license": "ISC"

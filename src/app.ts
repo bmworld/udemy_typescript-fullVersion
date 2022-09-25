@@ -3,11 +3,16 @@
 // console.log('result: ', result);
 // - 참고 // import 기능을 쓰려면, webpack bundler사용해야한다. 그러니... 일단은 typescript 공부에 집중할 수 있게, 나중에 하자.
 
+
+// - 사용자 정의 타입
+type Combinable = number | string;
+type ConversionDescriptor =  'as-number' | 'as-text'
+
 // - UNION TYPE : 복수의 타입 할당
 function combine(
-  input1: number | string,
-  input2: number | string,
-  resultConversion: "as-number" | "as-text" // Literal Type:  아무 문자열이 아닌 , "특정 문자열만" 허용하는 타입정의. // 여기는 union 타입에 literal 타입 2가지를 할당한 것이다.
+  input1: Combinable,
+  input2: Combinable,
+  resultConversion: ConversionDescriptor // Literal Type:  아무 문자열이 아닌 , "특정 문자열만" 허용하는 타입정의. // 여기는 union 타입에 literal 타입 2가지를 할당한 것이다.
 ) {
   let result;
   if (
@@ -36,4 +41,4 @@ const combinedStringAges = combine("30", "26", "as-number");
 // console.log(combinedStringAges);
 
 const combinedNames = combine("Max", "Anna", "as-text");
-console.log(combinedNames);
+// console.log('combinedNames: ',combinedNames);

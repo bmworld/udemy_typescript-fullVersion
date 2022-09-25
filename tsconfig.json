@@ -102,6 +102,6 @@
   },
   "include": [
     "./src/*"
-  ], /* - Typescript 파일이 모여있는 경로르 설정해줌*/
+  ], /* - Typescript 파일이 모여있는 경로를 설정해줌*/
   "exclude": ["node_modules"] /* - 제외할 파일*/
 }
