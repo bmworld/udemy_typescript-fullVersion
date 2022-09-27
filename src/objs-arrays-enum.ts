@@ -1,4 +1,4 @@
-
+console.log('-------------------------- objs-arrays-enum.ts --------------------------');
 // const person = {
 //   name: 'BM WORLD',
 //   age: 33,
@@ -42,7 +42,7 @@ enum Role {
   ADMIN, READ_ONLY, AHUTOR,
 };
 
-export const person = {
+const person = {
   name: 'BM WORLD',
   age: 33,
   hobby: ['Sports', 'Cooking'],
@@ -56,7 +56,7 @@ favoriteActivities = ['sports', 'z', 1];
 
 
 for (const hobby of person.hobby) {
-  // console.log(hobby.toUpperCase());
+  console.log(hobby.toUpperCase());
   // console.log(Number(hobby));
 // console.log(hobby.map(()=>{})) // ! ERROR: string은 순회할 수 없음
 }
@@ -70,7 +70,7 @@ console.log(person)
 
 
 
-export function getEmployee(id:string, name:string, salary:string) {
+function getEmployee(id:string, name:string, salary:string) {
   return {
     id,
     name,

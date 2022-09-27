@@ -1,3 +1,6 @@
+console.log('-------------------------- app.ts --------------------------');
+
+
 // import {getEmployee} from  './objs-arrays-enum'
 // const result = getEmployee('2', 'bmworld','dev');
 // console.log('result: ', result);
