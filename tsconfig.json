@@ -52,7 +52,8 @@
     // "declaration": true,                              /* Generate .d.ts files from TypeScript and JavaScript files in your project. */
     // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
     // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
-    // "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
+     "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
+    /* - => map파일이 생성되게한다 / 맵파일은 JS와 TS파일 사이의 debugger를 이어주는 역할*/
     // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
     "outDir": "dist" /* Specify an output folder for all emitted files. */,
     // "removeComments": true,                           /* Disable emitting comments. */
@@ -68,7 +69,8 @@
     // "newLine": "crlf",                                /* Set the newline character for emitting files. */
     // "stripInternal": true,                            /* Disable emitting declarations that have '@internal' in their JSDoc comments. */
     // "noEmitHelpers": true,                            /* Disable generating custom helper functions like '__extends' in compiled output. */
-    // "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. */
+     "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. 에러가 존재할 경우, 타입스크립트를 사용하여 컴파일 할 수 없게 함 / 기본값:false */
+    /* => 용도: 일반적으로 타입스크립트 파일에 에러가 있는 경우, 자바스크립트 파일을 가져오고 싶지 않은 경우에 설정*/
     // "preserveConstEnums": true,                       /* Disable erasing 'const enum' declarations in generated code. */
     //     "declarationDir": "./",                           /* Specify the output directory for generated declaration files. */
     // "preserveValueImports": true,                     /* Preserve unused imported values in the JavaScript output that would otherwise be removed. */
@@ -81,17 +83,21 @@
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
 
     /* Type Checking */
-    "strict": true /* Enable all strict type-checking options. */,
-    // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
-    // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
+    "strict": true /* Enable all strict type-checking options.*/,
+    /* - => 해당 옵션은, 아래의 모든 strict옵션을 활성화한것도 동일하다. */
+     "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+    /* - => any TYPE을 허용하지 않을 것인가의 여부 //  *** strict가 true이고, noImplicitAny가 false면, any타입에 대해서는 IDE 및 컴파일 에러를 발생시키지 않는다*/
+     "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
     // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
-    // "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
+     "strictBindCallApply": true,                      /* Check that the arguments for 'bind', 'call', and 'apply' methods match the original function. */
     // "strictPropertyInitialization": true,             /* Check for class properties that are declared but not set in the constructor. */
     // "noImplicitThis": true,                           /* Enable error reporting when 'this' is given the type 'any'. */
     // "useUnknownInCatchVariables": true,               /* Default catch clause variables as 'unknown' instead of 'any'. */
     // "alwaysStrict": true,                             /* Ensure 'use strict' is always emitted. */
-    // "noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
+//     "noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
+    /* - => 지역변수가 사용되지 않을 경우 에러표기*/
     // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
+    /* - => 사용되지 않는 매개변수가 존재할 경우 경우 에러표기*/
     // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
     // "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return in a function. */
     // "noFallthroughCasesInSwitch": true,               /* Enable error reporting for fallthrough cases in switch statements. */
