@@ -13,6 +13,29 @@
     <script src="/dist/src/union-aliases.js"></script>
     <script src="/dist/src/unknown-type.js"></script>
     <script src="/dist/src/button.js" defer></script>
+    <script src="/dist/src/javascript-basic.js" defer></script>
+    <style>
+      a {
+        text-decoration: none;
+      }
+      a,
+      button {
+        display: inline-block;
+        cursor: pointer;
+        padding: 10px 15px;
+        background-color: #ca0101;
+        box-sizing: border-box;
+        color: #fff;
+        border: 1px solid #ddd;
+        margin-right: 10px;
+        transition: all 0.2s ease-out;
+      }
+      a:hover,
+      button:hover {
+        background-color: #fff;
+        color: #000;
+      }
+    </style>
   </head>
   <body>
     <h2>Udemy TypeScript</h2>
@@ -21,10 +44,11 @@
       <li>0926 unknown타입</li>
       <li>0927 "절대"타입</li>
       <li>1004 tsconfig.js 옵션 설정</li>
+      <li>1005 js basic with ts</li>
     </ul>
     <hr />
-  <button type="button" class="mybutton">TEST 버튼</button>
-  
-  
+    <button type="button" class="mybutton">TEST 버튼</button>
+    <button type="button" class="button2">js-basic 버튼</button>
+    <a href="class.html">Class페이지로</a>
   </body>
 </html>
