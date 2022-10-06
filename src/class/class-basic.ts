@@ -7,6 +7,7 @@
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
+// # 추상클래스(abstract)를 사용할 경우, 인스턴스화할 수 없다.
 abstract class Department {
   // # static Property (정적 속성)
   static fiscalYear = 2022;
@@ -87,6 +88,7 @@ abstract class Department {
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
+
 class ITDepartment extends Department {
   admins: string[];
 
@@ -109,6 +111,7 @@ class ITDepartment extends Department {
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
+
 class AccountingDepartment extends Department {
   private lastReport: string;
 
@@ -145,11 +148,32 @@ class AccountingDepartment extends Department {
     }
     this.addReport(value);
   }
-
-  constructor(id: string, private reports: string[]) {
+  
+  
+  // ! 싱글톤 클래스일 경우, private 키워드 사용
+  //  싱글톤 클래스는 "new"로 생성하지 않고, Method를 생성 후, 호출하여 구성한다
+  //  -> 따라서, 특정 시점에 반드시 단 하나의 클래스 인스턴스가 존재한다.
+  private constructor(id: string, private reports: string[]) {
+  // constructor(id: string, private reports: string[]) {
     super(id, "AccountingName"); // super 키워드로 부모에게 전달.
     this.lastReport = reports[0];
   }
+  
+  
+  private static instance: AccountingDepartment; // ! 싱글톤 클래스일 경우 사용한다. static 속성에, instance가 저장되도록 한다.
+  // 클래스 내에서만 접근할 수 있다.
+  static getInstance() {
+    // getInstance는 해당 클래스(여기서는 AccountingDepartment)의 인스턴스가 이미 있는지 확인하고
+    // 이미 인스턴스가 있다면, 해당 인스턴스를 반환하고
+    // 인스턴스가 없다면, 새인스턴스 생성하여 반환
+    if (AccountingDepartment.instance){ // AccountingDepartment.instance = this.instance
+      return this.instance;
+    }
+    
+    this.instance = new AccountingDepartment('acntDpId-1', [])
+    return this.instance;
+  }
+  
   
   describe() {
     console.log('Accounting Department-ID:', this.id)
@@ -207,7 +231,12 @@ it.addEmployee("Anna");
 it.describe();
 it.printEmployeeInfo();
 
-const acnt = new AccountingDepartment("d2", []);
+
+// ! CASE: NOT private Instance
+// const acnt = new AccountingDepartment("d2", []);
+const acnt = AccountingDepartment.getInstance();
+console.log('acnt.mostRecentReport',acnt);
+// ! CASE: private Instance => 클래스 내부에 private constructor() 추가 & 클래스 내부에서만 접근가능한 Static Method를 사용함
 // console.log(acnt.mostRecentReport)
 acnt.mostRecentReport = 'Report: 등호를 사용하여, setter Method가 실행된다.';
 // ! get, set은 메소드로 실행하는게 아니라, '값'처럼 접근해야한다.
