@@ -1,10 +1,19 @@
 // ! 강사님 Tip) 코드는 의도를 명확히 하고, 깔끔하게 작성하는 것이 좋다
 //  => WHY ? 몇 주 동안 작업을 쉴 경우, 인간은 까먹기 쉽상이기 떄문이다.
 
-class Department {
+
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+abstract class Department {
+  // # static Property (정적 속성)
+  static fiscalYear = 2022;
+  // ----------------------------------------------------------------
   // name: string = 'initial name value'; // 이렇게 초기값을 설정할 수 있다.
   // name: string; // 초기값을 할당하지 않은 경우.
-  // ! public 속성은 기본으로 할당됨 (public name:string)
+  // ! public 속성은 기본으로 할당된다 (public name:string)
   // ! private 속성은 오직 클래스 내부에서만 (클래스 메소드 내부에서) 접근가능 && 하위 클래스에서도 접근 불가.
   // ! readonly 키워드: typescript ONLY 기능 / 초기화 중에, 단 한 번만 사용할 수 있음.
   // ! protected: 외부 접근불가, 클래스를 확장하는 모든 클래스에서 사용가능.
@@ -12,23 +21,55 @@ class Department {
   // private 키워드는 외부에서 접근할 수 없도록 함. ! typescripte ONLY && runtime(JS로 compile이후) 작동하지 않음.
   // 내부에서만 값을 변경할 수 있음.
 
-  constructor(private readonly id: string, public name: string) {
+  // ----------------------------------------------------------------
+  constructor(protected readonly id: string, public name: string) {
     // class 초기화 코드없이 , 매개변수에서 바로 초기화까지 축약하는 방법
-    // console.log(this); // - Class 내부의 this는 class자체를 가리킨다.
     // this.id = id;
-    // th₩is.name = name;
+    // this.name = name;
+    // console.log(this); // - Class 내부의 this는 class자체를 가리킨다.
+    /*
+    # this
+     _ class를 기반으로 생성된 ****Instnace를 참조***한다
+     _ 따라서 static으로 생성된 정적 속성 및 정적 메소드를 참조할 수 없다
+     _ examples
+     console.log(this.fiscalYear)  <--에러발생
+     console.log(Department.fiscalYear)  <--참조가능
+    */
+    
+  }
+  
+  /* # static Method (정적 매서드)
+      1. 인스턴스없이, 클래스에서 접근할 수 있는 정적메소드로 만듦
+      2. 객체를 반환해야함.
+  */
+  static createEmployee (name: string) {
+    return {
+      name: name
+    }
   }
 
-  // Department.prototype.describe = fuction (){...} // Method는 compile이후, 생성자 함수의 프로톼입에 추가된다.
-  describe(this: Department) {
-    /*
-      this를 매개변수로 할당할 경우, 명시적으로 class가 this임을 전달하므로, 명시적으로 this를 전달할 수 있다
-      new keyword없이 객체에 할당하는 경우(아래의 accountingCopy)에도
-      this가 class객체로 할당될 수 있도록 할 수 있게 한다.
-      즉 this는 Department 클래스에 기반한 Instance를 참조하도록한다.
-    */
-    console.log("DeaprtMent > descibe Method > this: ", this);
-  }
+  // Department.prototype.describe = fuction (){...} // Method는 compile이후, 생성자 함수의 .prototype에 추가된다.
+  /*
+  this를 매개변수로 할당할 경우, 명시적으로 class가 this임을 전달하므로, 명시적으로 this를 전달할 수 있다
+  new keyword없이 객체에 할당하는 경우(아래의 accountingCopy)에도
+  this가 class객체로 할당될 수 있도록 할 수 있게 한다.
+  즉 this는 Department 클래스에 기반한 Instance를 참조하도록한다.
+*/
+  // describe(this: Department) {
+  //   console.log("DeaprtMent > descibe Method > this: ", this);
+  // }
+  /*
+   # abstract: 추상클래스
+     _ 원본 클래스에서는 해당 method의 형태만 제공한다
+     _ 더불어서, class 선언앞에 abstract를 추가해줘야한다. // abstract class MyClassName () {...}
+     _ 보유(반환)해야하는 타입을 명시한다. (아래 샘플에서는 :void)
+     _ 모든 Instance에서는 absctract Method를 무조건 써야한다.
+     _ 용도: 추상 클래스는 일부 상위 클래스를 기반으로 하는 "모든 클래스가", 일부 공통 메소드 또는 속성을 공유하도록 하는 경우...
+         구체적인 값, 구체적인 구현 및 기본 클래스를 제공하지 않는 상황이고, 상속하는 클래스가 이를 각각 수행시키려고 할때 사용한다 .
+     
+  * */
+  abstract describe(this: Department): void
+  
 
   addEmployee(employee: string) {
     // this.id = this.employees.length+1; // readonly 속성으로 인하여, 초기화를 제외하고 변경할 수 없다.
@@ -40,6 +81,12 @@ class Department {
   }
 }
 
+
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
 class ITDepartment extends Department {
   admins: string[];
 
@@ -51,8 +98,17 @@ class ITDepartment extends Department {
     super(id, "상속받은녀석이 전달하는 name"); // super 키워드로 부모에게 전달.
     this.admins = admins;
   }
+  
+  describe(){
+    console.log('IT Department-ID:', this.id);
+  }
 }
 
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
 class AccountingDepartment extends Department {
   private lastReport: string;
 
@@ -79,7 +135,7 @@ class AccountingDepartment extends Department {
   }
 
   /*
-  # set
+  # setter
    - 사용자가 전달할 값인 인수를 취하도록 한다.
   * */
   set mostRecentReport(value: string) {
@@ -93,6 +149,10 @@ class AccountingDepartment extends Department {
   constructor(id: string, private reports: string[]) {
     super(id, "AccountingName"); // super 키워드로 부모에게 전달.
     this.lastReport = reports[0];
+  }
+  
+  describe() {
+    console.log('Accounting Department-ID:', this.id)
   }
 
   addEmployee(name: string) {
@@ -130,12 +190,15 @@ class AccountingDepartment extends Department {
 
 */
 
+
+const employee1 = Department.createEmployee('Max1');
+console.log('[static 키워드, 정적 메소드 사용하기] employee1: ',employee1)
+console.log('[static 키워드로, 정적 속성 사용하기] fiscalyear: ', Department.fiscalYear)
 const it = new ITDepartment("d1", ["Max"]); // 클래스를 상속받는 경우
 it.addEmployee("Max");
 it.addEmployee("Anna");
 // accounting.name = "ExternalEditedName";
 // accounting.id = "213"; // private키워드를 사용한 필드는 외부에서 편집할 수 없다.
-
 /*
  ! // accounting.employees[4] = 'bmworld'; // 외부에서 instance의 내부 필드를 직접 접근해서 변경하려는 경우
  - 외부에서 class 내부 field를 직접 변경하는 것을 막기 위해 private keyword를 추가하여, Private Field로 변환한다.
@@ -146,15 +209,31 @@ it.printEmployeeInfo();
 
 const acnt = new AccountingDepartment("d2", []);
 // console.log(acnt.mostRecentReport)
-acnt.mostRecentReport = 'Report: 등호를 사용하여, setter Method가 실행된다.'; // ! get, set은 메소드로 실행하는게 아니라, '값'처럼 접근해야한다.
+acnt.mostRecentReport = 'Report: 등호를 사용하여, setter Method가 실행된다.';
+// ! get, set은 메소드로 실행하는게 아니라, '값'처럼 접근해야한다.
 acnt.addReport("Report: Something went wrong...");
 console.log(acnt.mostRecentReport);
 acnt.addEmployee("Max");
 acnt.addEmployee("Beom");
 
-acnt.printReports();
-acnt.printEmployeeInfo();
+// acnt.printReports();
+// acnt.printEmployeeInfo();
+acnt.describe();
 
 
-// ------------------------------------------------------------------------------------------------
-// 클래스를 instnace화하지 않고, 접근하도록 만들기
+
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+// --------------------------------------------------------------------
+
+
+/* # 싱글턴 패턴
+    _ 객체지향프로그래밍의 설계패턴 중 하나
+    _ 특정 클래스의 인스턴스를 딱 하나만 갖도록 함
+    _ 이 패턴은 정적 메소드나 속성을 사용할 수 없거나 사용하지 않고자 하는 동시에
+      클래스를 기반으로 여러 객체를 만들 수는 없지만
+      항상 클래스 기반으로 정확히 하나의 객체만 가질 수 있도록 하는 경우 유용함.
+    _ 해당 클래스의 인스턴스에서 constructor에 private 키워들르 붙여서 private 생성자로 변경할 수 있다.
+*/
