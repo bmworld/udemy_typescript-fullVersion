@@ -55,8 +55,8 @@
      "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
     /* - => map파일이 생성되게한다 / 맵파일은 JS와 TS파일 사이의 debugger를 이어주는 역할*/
     // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
-    "outDir": "dist"                                     /* Specify an output folder for all emitted files. */,
-    // "removeComments": true,                           /* Disable emitting comments. 타입스크립트, 자바스크립트 파일으=  */
+    "outDir": "dist/src"                                     /* Specify an output folder for all emitted files. */,
+     "removeComments": true,                           /* Disable emitting comments. 타입스크립트, 자바스크립트 파일으=  */
     // "noEmit": true,                                   /* Disable emitting files from a compilation. */
     // "importHelpers": true,                            /* Allow importing helper functions from tslib once per project, instead of including them per-file. */
     // "importsNotUsedAsValues": "remove",               /* Specify emit/checking behavior for imports that are only used for types. */
@@ -112,8 +112,9 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": [ // - build에 포함시킬 파일
-    "./src/*",
-    "includeTest.ts"
+    "./src/**/*",
+    // => 가운데 ** 별표가 2개인 경우, "해당 경로에 존재하는 폴더 및 파일 모두 컴파일 대상이 된다.
+    // => 가운데 * 별표가 1개인 경우(./src/*/*), 가운데 경로에 해당하는 폴더 및 파일이 컴파일 되지 않고,  마지막 경로에 존재하는 파일만 컴파일된다.
   ],
   "exclude": [
     "node_modules", // would be theh default 기본으로 제외돼어있을 것이.
