@@ -460,18 +460,38 @@ body {
   content: "";
   position: absolute;
   left: -4px;
-  top: 50%;
-  transform: translate(0, -50%);
+  top: 11px;
+  /*transform: translate(0, -50%);*/
   background-color: #f1f2f3;
   border-radius: 50%;
   width: 4px;
   height: 4px;
 }
 
+.btn-section {
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(40px, 1fr));
+  place-items: center center;
+  gap: 10px;
+}
 
-
-.btn{
-  background-color: var(--color-main);
-  padding: 3px 10px;
-  margin: 10px;
+a,
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  padding: 4px 10px;
+  background-color: #ca0101;
+  box-sizing: border-box;
+  color: #fff;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease-out;
+}
+a:hover,
+button:hover {
+  background-color: #fff;
+  color: #000;
 }

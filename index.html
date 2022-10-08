@@ -14,28 +14,7 @@
     <script src="/dist/src/unknown-type.js"></script>
     <script src="/dist/src/button.js" defer></script>
     <script src="/dist/src/javascript-basic.js" defer></script>
-    <style>
-      a {
-        text-decoration: none;
-      }
-      a,
-      button {
-        display: inline-block;
-        cursor: pointer;
-        padding: 10px 15px;
-        background-color: #ca0101;
-        box-sizing: border-box;
-        color: #fff;
-        border: 1px solid #ddd;
-        margin-right: 10px;
-        transition: all 0.2s ease-out;
-      }
-      a:hover,
-      button:hover {
-        background-color: #fff;
-        color: #000;
-      }
-    </style>
+    <link rel="stylesheet" href="/src/style/default.css" />
   </head>
   <body>
     <h2>Udemy TypeScript</h2>
@@ -47,10 +26,13 @@
       <li>1005 js basic with ts</li>
     </ul>
     <hr />
-    <button type="button" class="mybutton">TEST 버튼</button>
-    <button type="button" class="button2">js-basic 버튼</button>
-    <a href="class.html">Class 페이지</a>
-    <a href="interface.html">Interface 페이지</a>
-    <a href="advancedType.html">고급타입 페이지</a>
+    <section class="btn-section">
+      <button type="button" class="mybutton">TEST 버튼</button>
+      <button type="button" class="button2">js-basic 버튼</button>
+      <a href="class.html">Class 페이지</a>
+      <a href="interface.html">Interface 페이지</a>
+      <a href="advancedType.html">고급타입 페이지</a>
+      <a href="generic.html">제네릭 페이지</a>
+    </section>
   </body>
 </html>
