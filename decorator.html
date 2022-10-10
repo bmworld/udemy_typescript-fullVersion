@@ -14,6 +14,11 @@
       src="dist/src/decorator/decorator-basic.js"
       defer
     ></script>
+    <script
+      type="text/javascript"
+      src="dist/src/decorator/decorator-validations.js"
+      defer
+    ></script>
   </head>
   <body>
     <h2>Udemy Typescript: decorator</h2>
@@ -25,14 +30,30 @@
           <p>tsconfig.js</p>
           <p>{..., "experimentalDecorators": true}</p>
         </li>
-        <li>정의 :</li>
       </ul>
     </div>
-  <section class="btn-section">
-    <a href="/" class="">홈</a>
-  </section>
-  <main id="app">
-  
-  </main>
+    <section class="btn-section">
+      <a href="/" class="">홈</a>
+      <button type="button" class="decorator">Click Me</button>
+    </section>
+    <hr />
+
+    <main id="app"></main>
+    <form class="example-section">
+      <h3 class="example-title">Decoration Example: Validation</h3>
+      <section class="flex-box flex-direction-col">
+        <label for="title"
+          >Title: <input type="text" placeholder="Course Title" id="title"
+        /></label>
+        <label for="price">
+          Price: <input type="text" placeholder="Course Price" id="price" />
+        </label>
+        <div class="btn-section">
+          <button type="submit">Submit</button>
+        </div>
+        <p>*Validation Result: <span id="result">없음</span></p>
+        
+      </section>
+    </form>
   </body>
 </html>

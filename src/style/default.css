@@ -495,3 +495,26 @@ button:hover {
   background-color: #fff;
   color: #000;
 }
+
+.example-section{
+  margin-top:50px;
+  padding: 20px;
+  border : 1px solid #555;
+  overflow: hidden;
+}
+
+.example-section label{display: flex; place-items: center; gap: 8px;}
+.example-title{margin-bottom: 16px;}
+
+.flex-box{
+  display: flex;
+  place-items: center;
+  gap: 10px;
+}
+.flex-box.flex-direction-col{
+  flex-direction: column;
+}
+
+.flex-box.flex-direction-row{
+  flex-direction: row;
+}
