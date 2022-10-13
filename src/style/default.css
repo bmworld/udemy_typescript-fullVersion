@@ -59,6 +59,12 @@ font-family: 'GmarketSansBold'
   --transition-cubic: cubic-bezier(0.69, 0.06, 0.38, 0.96);
 }
 
+
+::selection {
+  background-color: var(--color-main);
+  color: #fff;
+}
+
 /* 여백 초기화 */
 * {
   margin: 0;
