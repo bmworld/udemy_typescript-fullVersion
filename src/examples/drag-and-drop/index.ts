@@ -39,14 +39,24 @@ class Project {
 //  => 싱글톤 클래스는 "new"로 생성하지 않고, Method를 생성 후, 호출하여 구성
 //    ㄴ 따라서, 특정 시점에 반드시 단 하나의 클래스 인스턴스가 존재한다.
 
-type Listener = (items: Project[]) => void; // Listener의 타입을 설정하고, 반환되는 타입은 신경쓰지 않는다.
+type Listener<T> = (items: T[]) => void; // Listener의 타입을 설정하고, 반환되는 타입은 신경쓰지 않는다.
 
-class ProjectState {
-  private listeners: Listener[] = []; // ! Listener의 역할: "무언가 변경될 때마다" 함수 목록이 호출되도록 한다. 해당 listener를 우리에게 전달하는자들이 리스너가
+class State<T> {
+  // ! protected : 상속되는 클래스에서는 접근가능하도록 함 (private은 상속클래스에서 접근 불가능)
+  protected listeners: Listener<T>[] = []; // ! Listener의 역할: "무언가 변경될 때마다" 함수 목록이 호출되도록 한다. 해당 listener를 우리에게 전달하는자들이 리스너가
+  addListener(listenerFn: Listener<T>): void {
+    this.listeners.push(listenerFn);
+  }
+  
+}
+
+class ProjectState extends State<Project>{
   private projects: Project[] = [];
   private static instance: ProjectState; // ! instance는 클래스 그 자체와 동일하도록 타입설정해준다.
 
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   static getInstance() {
     /* # static Method (정적 매서드)
@@ -56,10 +66,6 @@ class ProjectState {
     return this.instance ? this.instance : new ProjectState();
   }
 
-  addListener(listenerFn: Listener) {
-    // _ addListener 메소드의 용도: 사용자가 새로운 project를 추가하여 변경사항이 있을때마다, 해당listener 함수의 참조배열을 실행하도록 한다.
-    this.listeners.push(listenerFn);
-  }
   addProject(title: string, description: string, numOfPeople: number) {
     // # BEFORE using class Ver.
     // const newProject =  {
@@ -168,26 +174,87 @@ function AutoBindDecorator(
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
 
-// Projecet List Lcass
-class ProjectList {
+// # Refactoring => Component Base Class :공통적으로 사용되는 요소를 해당 Class를 바탕으로 상속되도록 한다.
+
+// ! abstract 추상 클래스로 만들어서, 직접 인스턴스화가 이뤄지지 않게 한다.
+//  why ? 언제나 '상속'하는 역할만 하게 만들기 위함.
+
+abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement;
-  listElement: HTMLElement;
+  hostElement: T;
+  element: U;
+
+  constructor(
+    templateId: string, // ! 주의 : 필수 매개변수는 , 선택적 매개변수(물음표가 붙은 변수) 다음에 올 수 없다
+    hostElementId: string, // ! 주의 : 필수 매개변수는 , 선택적 매개변수(물음표가 붙은 변수) 다음에 올 수 없다
+    insertAtStart: boolean, // ! 주의 : 필수 매개변수는 , 선택적 매개변수(물음표가 붙은 변수) 다음에 올 수 없다
+    newElementId?: string
+  ) {
+    // ! HTMLTemplateElement의 TYPE을 찾을 수 없는 ERROR 해결
+    //   ㄴ TS에게 해당 값이 null이 아닌, 지정된 TYPE이 될 것이랑 것을 보장시킨다.
+    this.templateElement = document.getElementById(
+      templateId
+    )! as HTMLTemplateElement;
+    this.hostElement = document.getElementById(hostElementId) as T;
+  
+    
+    // ! .content: template 태그 사이에 조재하는 HTML코드를 참조
+    // ! importedNode: 두 번째 param(필수 param)이 true => Deep Clone을 이용하여 가져오기를 할것인지 말것인지를 결정
+    const importedNode = document.importNode(
+      this.templateElement.content,
+      true
+    ); // TS가 DocumentFragment로서 타입추론했다
+    this.element = importedNode.firstElementChild as U;
+    if (newElementId) {
+      this.element.id = newElementId;
+    }
+    this.attach(insertAtStart);
+  }
+  
+  // ! Udemy 강사님:  선택사항과 랜더링 로직을 분리하기 위하여,  Class Method를 설정함
+  private attach(insertAtBeginning: boolean) {
+    // ! insertAdjacentElement()
+    //  첫 번째 param: 삽입될 위치지정 (ex. afterbegin: 여는 태그가 바로 시작되는 곳)
+    this.hostElement.insertAdjacentElement(
+      insertAtBeginning ? "afterbegin" : "beforeend",
+      this.element
+    );
+  }
+
+  //  # absctract method => 실제로는 구현되지 않으며, "상속되는 class"에서 구현해야 함.
+  //  ㄴ ! abstract method는 private키워드를 지원하지 않는다 => 비공개 추상메서드 미.지.원
+  abstract renderContent(): void;
+  abstract configure?(): void; // ! 물음표(?)를 더해서, optional method (선택적으로 사용하는 매서드)로 변환함.
+}
+
+// Projecet List Lcass
+class ProjectList extends Component<HTMLDivElement, HTMLElement> {
   assignedProjects: Project[] = [];
 
   constructor(private type: "active" | "finished") {
-    // HTML에 문자열(active, finished)을 나타내고자 하므로, 여기 parma에서는 enum을 사용하지 않는다.
-    this.templateElement = document.getElementById(
-      "project-list"
-    ) as HTMLTemplateElement;
-    this.hostElement = (<HTMLDivElement>(
-      document.getElementById("app")
-    )) as HTMLDivElement;
-    const templateContent = this.templateElement.content;
-    const importedNode = document.importNode(templateContent, true); // TS가 DocumentFragment로서 타입추론했다
-    this.listElement = importedNode.firstElementChild as HTMLElement;
-    this.listElement.id = `${this.type}-projects`;
+    // ! super(): 생성자의 Base Class를 불러온다
+    super("project-list", "app", false, `${type}-projects`);
+  
+    // ! *** 아래 두 method 왜 상속받도록 구현하지 않았는가?
+    //  => 해당 method가 "상속받는 class의 생성자(constructor)에 영향을 받기 때문에" 상속받는 class에서 해당 method를 불러오는 것이 더 안전.
+    this.configure();
+    this.renderContent();
+  }
+  private renderProjects() {
+    // 이미 랜더링된 DOM에 의존하므로, 해당 DOM의  target ID를 맞춰준다.
+    const listId = `${this.type}-project-list`;
+    const UlistEl = document.getElementById(listId)! as HTMLUListElement;
+    UlistEl.innerHTML = ""; // ! 중복추가를 피하기 위해서, 새로운 prj이 추가될 때마다, 초기화를 시킨다. // 여기 app 로직에서는 통한다.
+    for (const prjItem of this.assignedProjects) {
+      console.log(prjItem);
+      const listItem = document.createElement("li");
+      listItem.classList.add("project-inner-list");
+      listItem.textContent = prjItem.title;
+      UlistEl.appendChild(listItem);
+    }
+  }
 
+  configure() {
     projectState.addListener((projects: Project[]) => {
       const relevantProject = projects.filter((prj) => {
         console.log(ProjectStatus);
@@ -198,35 +265,16 @@ class ProjectList {
       this.assignedProjects = relevantProject;
       this.renderProjects();
     });
-    this.attach();
-    this.renderContent();
-  }
-  private renderProjects() {
-    // 이미 랜더링된 DOM에 의존하므로, 해당 DOM의  target ID를 맞춰준다.
-    const listId = `${this.type}-project-list`;
-    const UlistEl = document.getElementById(listId)! as HTMLUListElement;
-    UlistEl.innerHTML = ''; // ! 중복추가를 피하기 위해서, 새로운 prj이 추가될 때마다, 초기화를 시킨다. // 여기 app 로직에서는 통한다.
-    for (const prjItem of this.assignedProjects) {
-      console.log(prjItem);
-      const listItem = document.createElement("li");
-      listItem.classList.add("project-inner-list");
-      listItem.textContent = prjItem.title;
-      UlistEl.appendChild(listItem);
-    }
   }
 
-  private renderContent() {
+  // ! Base class에서 정의된 추상메서드이므로 반드시 상속받는 클래스에서는 사용해야한다.
+  //  추상 메서드는 private 키워드를 지원하지 않으므로, 제거한다.
+  renderContent() {
     const listId = `${this.type}-project-list`;
-    this.listElement.querySelector("ul")!.id = listId;
-    this.listElement.querySelector(
+    this.element.querySelector("ul")!.id = listId;
+    this.element.querySelector(
       "h2"
     )!.textContent = `${this.type.toUpperCase()}-PROJECTS`;
-  }
-
-  private attach() {
-    // ! insertAdjacentElement(): HTMLElement를 삽입하기 위해서 JS가 Broser에게 제공하는 기본 Method.
-    //  ㄴ 첫번째 param: 삽입될 위치지정 (ex. afterbegin: 여는 태그가 바로 시작되는 곳)
-    this.hostElement.insertAdjacentElement("beforeend", this.listElement);
   }
 }
 
@@ -236,50 +284,39 @@ class ProjectList {
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
 // # project Input Class
-class ProjectInput {
+class ProjectInput extends Component <HTMLDivElement, HTMLFormElement> {
   /* #  HTMLInputElement는 Global에서 사용가능하다.
       why ? tsconfig.json에서 lib에 'dom'을 추가했고,
       이것이 dom TYPE, 즉 html Element TYPE을 Typescript의 타입으로서 사용할 수 있게 해준다.
   */
-  templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement; // 덜 구체적인 타입으로서 "HTMLElement"도 가능하다.
-  formElement: HTMLFormElement;
   titleInputElement: HTMLInputElement;
   descriptionInputElement: HTMLInputElement;
   peopleInputElement: HTMLInputElement;
 
   constructor() {
-    // ! HTMLTemplateElement의 TYPE을 찾을 수 없는 ERROR 해결
-    //   ㄴ TS에게 해당 값이 null이 아닌, 지정된 TYPE이 될 것이랑 것을 보장시킨다.
-    // # TYPE 형변환 VER. (데이터 타입을 '명시'하며, 실제 TYPE에는 영향을 주지 않는다.)
-    this.templateElement = document.getElementById(
-      "project-input"
-    ) as HTMLTemplateElement;
-    // # TYPE CASTING VER. (실제 TYPE을 변화시킴)
-    this.hostElement = <HTMLDivElement>document.getElementById("app")!;
-
-    // ! .content: template 태그 사이에 조재하는 HTML코드를 참조
-    // ! importedNode: 두 번째 param(필수 param)이 true => Deep Clone을 이용하여 가져오기를 할것인지 말것인지를 결정
-    const templateContent = this.templateElement.content;
-    const importedNode = document.importNode(templateContent, true); // TS가 DocumentFragment로서 타입추론했다
-    this.formElement = importedNode.firstElementChild as HTMLFormElement;
-    this.formElement.id = "user-form";
-
-    this.titleInputElement = this.formElement.querySelector(
+    
+    super('project-input','app',  true, 'user-form'     );
+    this.titleInputElement = this.element.querySelector(
       "#title"
     ) as HTMLInputElement;
-    this.descriptionInputElement = this.formElement.querySelector(
+    this.descriptionInputElement = this.element.querySelector(
       "#description"
     ) as HTMLInputElement;
-    this.peopleInputElement = this.formElement.querySelector(
+    this.peopleInputElement = this.element.querySelector(
       "#people"
     ) as HTMLInputElement;
-
-    // EXUCUTE METHODS;
-    this.attach(); // ! TS의 Class를 실행하여 template 태그 내부에 존재하는 form tag를 활성화 시킨다.
-    this.configure();
+    this.configure(); //
   }
+  
+  
+  configure() {
+    this.element.addEventListener("submit", this.submitHandler);
+  }
+  
+  renderContent(){};
 
+  
+  
   // # 튜플타입: JS에서 배열타입이 뒤죽박죽이 되지 않도록, 타입을 지정해주는 방식.
   private gatherUserInput(): [string, string, number] | undefined {
     // 튜플타입 지정
@@ -335,16 +372,8 @@ class ProjectInput {
     }
   }
 
-  private configure() {
-    this.formElement.addEventListener("submit", this.submitHandler);
-  }
-
-  // ! Udemy 강사님:  선택사항과 랜더링 로직을 분리하기 위하여,  Class Method를 설정함
-  private attach() {
-    // ! insertAdjacentElement(): HTMLElement를 삽입하기 위해서 JS가 Broser에게 제공하는 기본 Method.
-    //  ㄴ 첫번째 param: 삽입될 위치지정 (ex. afterbegin: 여는 태그가 바로 시작되는 곳)
-    this.hostElement.insertAdjacentElement("afterbegin", this.formElement);
-  }
+  
+ 
 }
 
 const prj = new ProjectInput();
