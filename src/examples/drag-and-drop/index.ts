@@ -10,6 +10,30 @@ console.log("--------Example:  Drag and Dop ---------");
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
 
+/*
+  #  Drag & Drop Interface
+   interface는 일부 객체의 구조를 단순히 정의하기 위함이 아닌,
+   어떤 클래스들이 이 클래스들로 하여금, 특정 메소드를 실행하도록 하는,
+   일종의 계약(contract)를 맺게 해준다.
+   => 효과 : 더큰 App을 만들 때, 더 깔끔하고, 이해하기 쉬운 코드를 쓰기 위함. (특히, '팀'단위로 일할 때.)
+*/
+interface Draggable{
+  // ! Drag Event를 활성화하려면, HTML태그에 draggable='true' 속성을 추가해야한다.
+  dragStartHandler (event: DragEvent) : void;
+  dragEndHandler (event: DragEvent) : void;
+}
+
+interface DragType {// 드레깅 가능한 요소를 Rendering할 때 쓰임=> 여기서는 projectItem Class가 될거다.
+  dragOverHandler(event: DragEvent): void;
+  dropHandler (event: DragEvent): void;
+  dragLeaveHandler(event: DragEvent) :void;
+  
+}
+
+
+
+
+
 // # Project Type
 
 // - 타입정의 시, 식별자만 필요한 경우, 사용하기 딱 좋다.
@@ -77,7 +101,7 @@ class ProjectState extends State<Project>{
 
     // # AFTER using class Ver.
     const newProject = new Project(
-      Math.random().toString(),
+      Math.floor(Math.random() * 1000).toString(),
       title,
       description,
       numOfPeople,
@@ -85,7 +109,22 @@ class ProjectState extends State<Project>{
     );
 
     this.projects.push(newProject);
+    
+    this.updateListeners();
 
+    
+  }
+  
+  moveProject (projectId: string, newStatus: ProjectStatus) { // drag & drop이 되는 순간, projectItem의 id를 event.dataTransfer의 setData , getData를 통해서 옮기도록 설정해두었다. 그걸 활용.
+    const thisProject = this.projects.find(prj => prj.id === projectId);
+    console.log('moveProject > thisProject: ',thisProject);
+    if(thisProject && thisProject .status !==  newStatus){
+      thisProject.status = newStatus;
+      this.updateListeners();
+    }
+  }
+  
+  private updateListeners() {
     for (const listenerFn of this.listeners) {
       // # 해당 함수가 호출되었을 때, this.projects 프로젝트목록 배열을 전달받게 만든다.
       listenerFn(this.projects.slice());
@@ -109,8 +148,10 @@ interface Validatable {
   min?: number; // 용도: 수치 값이 최소값 이상인지 확인
   max?: number; // 용도: 수치 값이 최대값 이하인지 확인
 }
+
+
 function validateInputs(validatableInput: Validatable): boolean {
-  console.log("validatableInput", validatableInput);
+  // console.log("validatableInput", validatableInput);
   let isValid = true;
   if (validatableInput.required) {
     // 해당 값이 '필수'값이라면, 문자열의 길이를 확인한다.
@@ -227,8 +268,70 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   abstract configure?(): void; // ! 물음표(?)를 더해서, optional method (선택적으로 사용하는 매서드)로 변환함.
 }
 
-// Projecet List Lcass
-class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+
+
+
+// ---------------------------------------------------------------
+// Projecet Item class
+class ProjectItem extends Component <HTMLUListElement, HTMLLIElement> implements Draggable {
+  private projectItem: Project;
+  
+  get persons () { // getter와 setter Property는 보통 기본변수설정란 아래에서 선언한다.
+    if(this.projectItem.people === 1){
+    } else {
+      return `${this.projectItem.people} persons`
+    }
+  }
+  
+  constructor(hostId:string, projectItem: Project){
+    super('single-project', hostId, false, projectItem.id);
+    this.projectItem = projectItem;
+    this.configure();
+    this.renderContent();
+  }
+  
+  @AutoBindDecorator
+  dragStartHandler(event: DragEvent) {
+    console.log('dragStart!',event);
+    /*
+      # dataTransfer 내의 data가 null일 가능성이 있는 경우가 있다.
+       1. 어떤 Listener가 그것을 밟생시키는지
+       2. 당신이 어떤 이벤트를 처리하는지에 따라 데이터전송이 불가능한 경우도있다.
+       3. 모든 Drag이벤트가 dataTransfer 매서드를 갖고 있는 것은 아니다.
+    */
+    
+    // # setData()=> param 첫 번째: 데이터 포맷의 식별자
+    event.dataTransfer!.setData('text/plain', this.projectItem.id);
+    // ! ㄴ 일부의 data(id값)만 전달해서, 데이터를 옮긴다 (+  메모리를 절약)
+    event.dataTransfer!.effectAllowed= 'move';
+  }
+  
+  @AutoBindDecorator
+  dragEndHandler(event: DragEvent) {
+    console.log('dragEnd!', event);
+  }
+  
+  configure() {
+    this.element.addEventListener('dragstart', this.dragStartHandler);
+    this.element.addEventListener('dragend', this.dragEndHandler);
+  
+  }
+  renderContent() {
+    console.log(this.persons);
+    // ! 여기서 this.element는 Component의 Generic Type으로 설정된 것 중, HTMLLIElement.
+    this.element.querySelector('h2')!.textContent = this.projectItem.title;
+    this.element.querySelector('h3')!.textContent = `${this.persons} assigned`;
+    this.element.querySelector('p')!.textContent = this.projectItem.description;
+  }
+}
+
+
+
+
+
+// ---------------------------------------------------------------
+// Projecet List class
+class ProjectList extends Component<HTMLDivElement, HTMLElement> implements DragType {
   assignedProjects: Project[] = [];
 
   constructor(private type: "active" | "finished") {
@@ -246,18 +349,44 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     const UlistEl = document.getElementById(listId)! as HTMLUListElement;
     UlistEl.innerHTML = ""; // ! 중복추가를 피하기 위해서, 새로운 prj이 추가될 때마다, 초기화를 시킨다. // 여기 app 로직에서는 통한다.
     for (const prjItem of this.assignedProjects) {
-      console.log(prjItem);
-      const listItem = document.createElement("li");
-      listItem.classList.add("project-inner-list");
-      listItem.textContent = prjItem.title;
-      UlistEl.appendChild(listItem);
+      // console.log(prjItem);
+      new ProjectItem(this.element.querySelector('ul')!.id, prjItem);
     }
+  }
+  
+  @AutoBindDecorator
+  dragOverHandler(event: DragEvent) { // Drag후, Drop 가능한 장소임을 형상화하기위한 Method로 사용
+    if(event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
+      // console.log('dragOverHandler',event);
+      event.preventDefault();
+      // ! "Drop을 가능하게 하려면" JS의 "dragover" event에서 preventDefault()를 실행해줘야함. // 다른 event에서는 소용없음.
+      const listEl = this.element.querySelector('ul')!;
+      listEl.classList.add('droppable');
+    }
+
+  }
+  
+  @AutoBindDecorator
+  dropHandler(event: DragEvent) {
+    const prjId = event.dataTransfer!.getData('text/plain');
+    projectState.moveProject(prjId, this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished);
+    
+  }
+  
+  @AutoBindDecorator
+  dragLeaveHandler(event: DragEvent){
+    // console.log('dragLeaveHandler',event);
+    const listEl = this.element.querySelector('ul')!;
+    listEl.classList.remove('droppable');
   }
 
   configure() {
+    this.element.addEventListener('dragover', this.dragOverHandler);
+    this.element.addEventListener('dragleave', this.dragLeaveHandler);
+    this.element.addEventListener('drop', this.dropHandler);
+    
     projectState.addListener((projects: Project[]) => {
       const relevantProject = projects.filter((prj) => {
-        console.log(ProjectStatus);
         return this.type === "active"
           ? prj.status === ProjectStatus.Active
           : prj.status === ProjectStatus.Finished;
@@ -277,6 +406,8 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     )!.textContent = `${this.type.toUpperCase()}-PROJECTS`;
   }
 }
+
+
 
 // ---------------------------------------------------------------
 // ---------------------------------------------------------------
