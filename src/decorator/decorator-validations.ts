@@ -65,23 +65,24 @@ class Course {
 }
 
 const courseForm = document.querySelector("form")!;
+if(courseForm){
+  courseForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const titleEl = courseForm.querySelector("#title") as HTMLInputElement;
+    const priceEl = courseForm.querySelector("#price") as HTMLInputElement;
+    const title = titleEl.value;
+    const price = +priceEl.value;
+    // ! TIP
+    //  +(더하기) 연산자: 피연산자 앞에 위치하며, 피연산자를 평가
+    //  피연산자가 숫자가 아니라면, "숫자로 변환"을 시도함
+    
+    const createdCourse = new Course(title, price); // => title & price의 value가 포함된 object
+    const validationResult = validate(createdCourse);
+    const resultEl = courseForm.querySelector("#result")! as HTMLInputElement;
+    resultEl.innerText = validationResult ? 'Success' : 'Failed';
+    if(!validationResult){
+      throw new Error("Invalid input, please try again!");
+    }
+  });
+}
 
-courseForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const titleEl = courseForm.querySelector("#title") as HTMLInputElement;
-  const priceEl = courseForm.querySelector("#price") as HTMLInputElement;
-  const title = titleEl.value;
-  const price = +priceEl.value;
-  // ! TIP
-  //  +(더하기) 연산자: 피연산자 앞에 위치하며, 피연산자를 평가
-  //  피연산자가 숫자가 아니라면, "숫자로 변환"을 시도함
-
-  const createdCourse = new Course(title, price); // => title & price의 value가 포함된 object
-  const validationResult = validate(createdCourse);
-  const resultEl = courseForm.querySelector("#result")! as HTMLInputElement;
-  resultEl.innerText = validationResult ? 'Success' : 'Failed';
-  if(!validationResult){
-    throw new Error("Invalid input, please try again!");
-  }
-  
-});

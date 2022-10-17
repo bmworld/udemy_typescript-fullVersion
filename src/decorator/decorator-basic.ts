@@ -245,7 +245,10 @@ const printClass = new PrinterWithAutoBind();
 
 // # No Bind  && @AutoBind Decorator Ver.
 const button_forDecorator = document.querySelector('button.decorator')!;
-button_forDecorator.addEventListener('click', printClass.showMessage );
+if(button_forDecorator) {
+  button_forDecorator.addEventListener('click', printClass.showMessage );
+}
+
 
 // ! addEventListner에서 함수를 바로 실행했을 때 this : button
 //  this가 printClass를 지칭하도록 바인딩 작업을 해줘야한다.

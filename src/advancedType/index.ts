@@ -188,7 +188,8 @@ console.log('-------------------------------------------------------')
 // ! TS는 HTML파일을 분석할 수 없다.
 // # 형변환 방법1 => TS는 JSX의 홑화살과 완벽하게 분리하도록 코드를 작성했다. 참조하시라.
 const userInputElem_case1 = <HTMLInputElement>document.querySelector('.user-input');
-userInputElem_case1.value ='Hello CASE 1';
+if(userInputElem_case1) userInputElem_case1.value ='Hello CASE 1';
+
 // HTMLInputElement는 전역에서 사용가능한 TS TYPE이다.
 // # 형변환 방법2-1
 const userInputElem_case2 = document.querySelector('.user-input')! as HTMLInputElement;
@@ -198,7 +199,8 @@ const userInputElem_case2 = document.querySelector('.user-input')! as HTMLInputE
   - as : 형변환이다.
   
 */
-userInputElem_case2.value ='Hello CASE 2';
+if(userInputElem_case2) userInputElem_case2.value ='Hello CASE 2';
+
 // # 형변환 방법2-2 => 느낌표의 대안
 const userInputElem_case3 = document.querySelector('.user-input');
 if(userInputElem_case3){

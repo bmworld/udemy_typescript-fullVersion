@@ -30,7 +30,7 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "module": "commonjs"                                 /* Specify what module code is generated. */,
+    "module": "amd"                                 /* Specify what module code is generated. */,
      "rootDir": "./src",                                  /* Specify the root folder within your source files. */
     // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
@@ -53,8 +53,13 @@
     // "declarationMap": true,                           /* Create sourcemaps for d.ts files. */
     // "emitDeclarationOnly": true,                      /* Only output d.ts files and not JavaScript files. */
      "sourceMap": true,                                /* Create source map files for emitted JavaScript files. */
-    /* - => map파일이 생성되게한다 / 맵파일은 JS와 TS파일 사이의 debugger를 이어주는 역할*/
-    // "outFile": "./",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
+    /* - map파일이 생성되게한다 / 맵파일은 JS와 TS파일 사이의 debugger를 이어주는 역할*/
+     "outFile": "./dist/bundle.js",                                  /* Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output. */
+    /* - outFile은 Typescript가 namespace와 연결되도록한다.
+        여러 개의 JS파일을 컴파일하신 대신에, compile중 연결되는 reference들을 하나의 JS파일로 연결한다.
+        ! outFile을 활성화할 경우, "module"은 commonJs를 사용할 수 없고, "amd"를 사용해야한다.
+
+    */
     "outDir": "dist/src"                                     /* Specify an output folder for all emitted files. */,
      "removeComments": true,                           /* Disable emitting comments. 타입스크립트, 자바스크립트 파일으=  */
     // "noEmit": true,                                   /* Disable emitting files from a compilation. */

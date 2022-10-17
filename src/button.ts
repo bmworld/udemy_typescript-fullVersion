@@ -2,11 +2,13 @@ console.log("-------------------------- button.ts --------------------------");
 const button = document.querySelector("button")!;
 // js가 실행되는 페이지의 dom node에 포인터를 반환하지 못하면 null을 반환한다.
 // - 느낌표는, 잠재적인 null객체에 접근하는 것에 대하여, javscript에게 해당 버튼이 반드시 존재한다는 의미를 전달.
+if(button){
+  button.addEventListener(
+    "click",
+    clickHandler.bind(null, "a1", "a2", "a3")
+  );
+}
 
-button.addEventListener(
-  "click",
-  clickHandler.bind(null, "a1", "a2", "a3")
-);
 // clickHandler에 인수를 제공하기 위해서 bind Method를 사용한다.
 // bind에 null을 binding할 경우, null Error를 반환한다. 이것을 비활성화하기위하여,
 // tsconfig에서 stricBindCallAppy옵션을 false로 설정한다.
