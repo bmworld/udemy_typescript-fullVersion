@@ -81,3 +81,5 @@ export class ProjectState extends State<Project> {
 }
 
 export const projectState = ProjectState.getInstance();
+
+console.log('Module에서 여러번 import되는 파일은 몇번 실행될까?\n porject-state.ts의 projectState는 2개 이상의 파일에서 import한다!!!! 몇번 실행될까??')

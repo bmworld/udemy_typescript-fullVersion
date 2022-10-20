@@ -8,7 +8,7 @@ export interface Validatable {
   max?: number; // 용도: 수치 값이 최대값 이하인지 확인
 }
 
-export function validateInputs(validatableInput: Validatable): boolean {
+export function validate(validatableInput: Validatable): boolean {
   // console.log("validatableInput", validatableInput);
   let isValid = true;
   if (validatableInput.required) {

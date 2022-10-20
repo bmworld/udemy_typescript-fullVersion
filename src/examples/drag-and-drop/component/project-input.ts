@@ -1,6 +1,15 @@
 import { Component } from "./base-component.js";
-import {Validatable, validateInputs} from "../util/validation.js";
-import {AutoBind} from '../decorator/autobind.js'
+
+// # import 기본 VER. : 해당 파일에서 실제 export한 항목의 이름을 그대로 가져옴
+// import {Validatable, validate} from "../util/validation.js";
+
+// # import 그룹화 VER.: "*" 로 모든항목을 가져오고 "as" 키워드를 사용하여 임의의 이름을 할당 => 세부 export항목은 할당한 이름내부의 객체처럼 접근할 수 있다.
+import * as Validation from "../util/validation.js";
+
+
+// # aliased Name: "as" 키워드를 사용하여, import하는 파일에서 별명(aliased Name)을 할당하여 불러오는 기능
+//  ㄴ 왜 쓰는가? 이름충돌 방지.
+import {AutoBind as autobind} from '../decorator/autobind.js'
 import {projectState} from "../state/project-state.js";
 
 export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
@@ -39,27 +48,27 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     const enteredDescription = this.descriptionInputElement.value;
     const enteredPeople = +this.peopleInputElement.value; // ! 숫자타입이 되도록 변환
 
-    const titleValidatable: Validatable = {
+    const titleValidatable: Validation.Validatable = {
       value: enteredTitle,
       required: true,
     };
 
-    const descriptionValidatable: Validatable = {
+    const descriptionValidatable: Validation.Validatable = {
       value: enteredDescription,
       required: true,
       minLength: 5,
     };
 
-    const peopleValidatable: Validatable = {
+    const peopleValidatable: Validation.Validatable = {
       value: enteredPeople,
       required: true,
       min: 1,
       max: 5,
     };
     if (
-      !validateInputs(titleValidatable) ||
-      !validateInputs(descriptionValidatable) ||
-      !validateInputs(peopleValidatable)
+      !Validation.validate(titleValidatable) ||
+      !Validation.validate(descriptionValidatable) ||
+      !Validation.validate(peopleValidatable)
     ) {
       // if(!enteredTitle.trim() || !enteredDescription.trim() || !enteredPeople.trim()){
       alert("Invalid input, please try again!");
@@ -75,7 +84,8 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     this.peopleInputElement.value = "";
   }
 
-  @AutoBind
+  // @AutoBind // original name
+  @autobind // trasformed name by using as keyword
   private submitHandler(e: Event) {
     e.preventDefault();
     const userInput = this.gatherUserInput();
