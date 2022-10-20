@@ -1,7 +1,7 @@
-import { Component } from "./base-component.js";
-import { Draggable } from "../models/drag-and-drop.js"; // 확장
-import { Project } from "../models/project-model.js";
-import { AutoBind } from "../decorator/autobind.js";
+import { Component } from "./base-component";
+import { Draggable } from "../models/drag-and-drop"; // 확장
+import { Project } from "../models/project-model";
+import { AutoBind } from "../decorator/autobind";
 
 // Projecet Item class
 export class ProjectItem

@@ -85,6 +85,7 @@ out
 .nuxt
 dist
 
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
@@ -116,4 +117,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+
+# IDE (webstorm)
+.idea/
 /.idea/jsLibraryMappings.xml
+
+
+# custom dist files for Study with Udemy lectures
+dist
+distByWebpack

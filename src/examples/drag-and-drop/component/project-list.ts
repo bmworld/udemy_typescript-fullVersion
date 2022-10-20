@@ -1,9 +1,9 @@
-import { Component } from "./base-component.js";
-import { DragType } from "../models/drag-and-drop.js"; // 확장
-import {Project, ProjectStatus} from "../models/project-model.js";
-import { AutoBind } from "../decorator/autobind.js";
-import { ProjectItem } from "./project-item.js";
-import {projectState} from "../state/project-state.js";
+import { Component } from "./base-component";
+import { DragType } from "../models/drag-and-drop";
+import {Project, ProjectStatus} from "../models/project-model";
+import { AutoBind } from "../decorator/autobind";
+import { ProjectItem } from "./project-item";
+import {projectState} from "../state/project-state";
 
 export class ProjectList
   extends Component<HTMLDivElement, HTMLElement>

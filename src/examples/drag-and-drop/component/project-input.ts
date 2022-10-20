@@ -1,16 +1,16 @@
-import { Component } from "./base-component.js";
+import { Component } from "./base-component";
 
 // # import 기본 VER. : 해당 파일에서 실제 export한 항목의 이름을 그대로 가져옴
 // import {Validatable, validate} from "../util/validation.js";
 
 // # import 그룹화 VER.: "*" 로 모든항목을 가져오고 "as" 키워드를 사용하여 임의의 이름을 할당 => 세부 export항목은 할당한 이름내부의 객체처럼 접근할 수 있다.
-import * as Validation from "../util/validation.js";
+import * as Validation from "../util/validation";
 
 
 // # aliased Name: "as" 키워드를 사용하여, import하는 파일에서 별명(aliased Name)을 할당하여 불러오는 기능
 //  ㄴ 왜 쓰는가? 이름충돌 방지.
-import {AutoBind as autobind} from '../decorator/autobind.js'
-import {projectState} from "../state/project-state.js";
+import {AutoBind as autobind} from "../decorator/autobind";
+import {projectState} from "../state/project-state";
 
 export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   /* #  HTMLInputElement는 Global에서 사용가능하다.

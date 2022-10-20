@@ -226,7 +226,7 @@ if(userInputElem_case3){
 interface ErrorContainer {
   // 다양한 input 필드에 대하여 여러 값과 식별자에 대응할 수 있도록 유연하게 만들거다.
   // 문자열이나, 몇 개의 속성 및 속성이름을 가질지 미리 알 수 없는 상황에 대응.
-  [prop: number | string]: string; // ! index TYPE => [] 대괄호쌍 내의 속성이름은 string, number, symbol 타입을 사용할 수 있다.
+  [prop: string]: string; // ! index TYPE => [] 대괄호쌍 내의 속성이름은 string, number, symbol 타입을 사용할 수 있다.
   // ! 미리 정의된 속성을 추가할 수 있다.
   // id: string; // ! PASS => index 타입과 매칭됨
   // id: number; // ! ERROR =>   index 타입([prop:string])에 설정된 타입만 사용할 수 있다.

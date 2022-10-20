@@ -31,6 +31,8 @@
 
     /* Modules */
     "module": "es6"                                 /* Specify what module code is generated. */,
+    // ㄴ - ts-loader의 wepack이 해당 Target을 사용한다.
+    // ㄴ es6: 신형 브라우저에서만 실행된느 코드로 변환된다.
      "rootDir": "./src",                                  /* Specify the root folder within your source files. */
     // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
