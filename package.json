@@ -6,6 +6,7 @@
   "main": "index.html",
   "repository": "https://github.com/bmworld/udemy_typescript-full-ver.-.git",
   "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
     "lite-server": "^2.6.1",
     "prettier": "2.7.1",
     "ts-loader": "^6.2.1",
@@ -18,7 +19,8 @@
   "scripts": {
     "start": "tsc-watch --onSuccess \"node ./dist/src/app.js\" & npm run server",
     "server": "lite-server",
-    "build": "webpack"
+    "dev": "webpack-dev-server",
+    "build": "webpack --config webpack.config.prod.js"
   },
   "keywords": [],
   "license": "ISC"

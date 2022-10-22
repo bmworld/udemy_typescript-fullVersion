@@ -1,10 +1,10 @@
+console.log('----- DEVELOPMENT MODE by webpack.config.js ------');
 // webpack.config.js
-// # 해당 파일은 webpack이 자동으로 인식해서,
-//  project를 어떻게 동작할지 전달해주는 역할을 한다.
-//  ㄴ javascript 및 node 기능을 사용한다.
 
+// # webpack의 가장 큰 효과
+//  : 수 많은 파일을 bundling => HTTP요청을 줄임을 통해, Application 속도를 향상시킨다.
 
-
+// # 해당 파일은 webpack이 자동으로 인식해서,  project를 어떻게 동작할지 전달해주는 역할을 한다.
 /* # node.js의 export구문을 사용한다.
     사용목적: webpack이 채택할 구성오브(configureation object)가 될 "JS Object"를 "export"
 */
@@ -33,7 +33,16 @@ const path = require('path');
 
 
 module.exports = {
-  entry: './src/appWithWebpack.ts', // # 현재 project의 entry파일이다.
+  mode: 'development',
+  /* # 'development' mode => webpack에게 개발중임을 전달함으로써 webpack-dev-server가 아래와 같이 재구성됨
+      1. 최적화를 덜 진행
+      2. debugging을 더 쉽게함
+      3. 의미있는 Erorr Message 제공
+     # 'production' mode
+      1. 코드 경량화
+      2. publicPath 삭제하기 (webpack-dev-server에게 필요한 내용이기 때문)
+  */
+  entry: './src/webpackApp.ts', // # 현재 project의 entry파일이다.
   output: { // # 현재 project의 출력물이 write될 정보
     // filename: 'myBundle.[contenthash].js', // 동적인 파르르 추가할 수도 있다.
     filename: 'projectBundle.js', // 동적인 파르르 추가할 수도 있다.
@@ -42,6 +51,7 @@ module.exports = {
     // # 두번째 param에 지정된 dist폴더로의 절대경로를 설정하고, webpack은 이를 이용하여 output(bundling결과물)을 write한다.
     // ouput출력물이 빌드될 경로
     // ! Error방지를 위해 "tsconfig.json" 인접 파일 내의 경로와 매칭시킨다.
+    // publicPath: "/distByWebpack", // #  "webpack-dev-server"가 패키지를 구동할 때, memory상에 번들링된 파일(ex. projectBundling.js)이 출력된 것이 어디에 쓰여지고, html파일과 비교했을 때 실제로 어디에 있는지 webpack에게 정보를 전달하는 과정
   },
   devtool: 'inline-source-map',
   // # webpack이 생성한 bundling을 추출하고, 정확하게 접속해야하는 '생성된 source-map'이 이미 존재한다는 것을 webpack에게 전달함 (tsconfig.json의 sourceMap: true가 그 증거다)
