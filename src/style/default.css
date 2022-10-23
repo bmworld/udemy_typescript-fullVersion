@@ -443,9 +443,12 @@ img {
   text-indent: -9999px;
 } /*대체 텍스트가 아닌 접근성을 위한 숨김 텍스트를제공할때*/
 
+
+
+
 /* ------------ start --------- */
 body {
-  padding: 10vh 20px 10px;
+  padding: 5vh 20px 20vh;
   background-color: #111;
   color: #fff;
 }

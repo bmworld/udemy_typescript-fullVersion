@@ -44,14 +44,14 @@ module.exports = {
   */
   entry: './src/webpackApp.ts', // # 현재 project의 entry파일이다.
   output: { // # 현재 project의 출력물이 write될 정보
-    // filename: 'myBundle.[contenthash].js', // 동적인 파르르 추가할 수도 있다.
-    filename: 'projectBundle.js', // 동적인 파르르 추가할 수도 있다.
-    // # ex. [contenthash]: 모든 빌드에 대한 고유(unique) 캐시를 자동생성 => 브라우저 내에서 caching을 지원한다.
     path: path.resolve(__dirname, 'distByWebpack'),
     // # 두번째 param에 지정된 dist폴더로의 절대경로를 설정하고, webpack은 이를 이용하여 output(bundling결과물)을 write한다.
     // ouput출력물이 빌드될 경로
     // ! Error방지를 위해 "tsconfig.json" 인접 파일 내의 경로와 매칭시킨다.
     // publicPath: "/distByWebpack", // #  "webpack-dev-server"가 패키지를 구동할 때, memory상에 번들링된 파일(ex. projectBundling.js)이 출력된 것이 어디에 쓰여지고, html파일과 비교했을 때 실제로 어디에 있는지 webpack에게 정보를 전달하는 과정
+    // filename: 'myBundle.[contenthash].js', // 동적인 파르르 추가할 수도 있다.
+    filename: 'projectBundle.js', // 동적인 파르르 추가할 수도 있다.
+    // # ex. [contenthash]: 모든 빌드에 대한 고유(unique) 캐시를 자동생성 => 브라우저 내에서 caching을 지원한다.
   },
   devtool: 'inline-source-map',
   // # webpack이 생성한 bundling을 추출하고, 정확하게 접속해야하는 '생성된 source-map'이 이미 존재한다는 것을 webpack에게 전달함 (tsconfig.json의 sourceMap: true가 그 증거다)
