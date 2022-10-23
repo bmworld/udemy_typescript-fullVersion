@@ -11,21 +11,23 @@
     "start": "tsc-watch --onSuccess \"node ./dist/src/app.js\" & npm run server",
     "server": "lite-server",
     "dev": "webpack-dev-server",
-    "build": "webpack --config webpack.config.prod.js"
+    "build": "webpack --config webpack.config.prod.js",
+    "build-google": "webpack --config webpack.config.google.js"
   },
   "dependencies": {
-    "class-validator": "^0.13.2",
+    "axios": "0.19.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/googlemaps": "^3.43.3",
     "@types/lodash": "^4.14.186",
     "clean-webpack-plugin": "^4.0.0",
     "lite-server": "^2.6.1",
     "prettier": "2.7.1",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "6.2.1",
     "tsc-watch": "^5.0.3",
-    "typescript": "^3.7.2",
-    "webpack": "4.31.0",
+    "typescript": "3.7.2",
+    "webpack": "4.41.0",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0"
   }

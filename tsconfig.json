@@ -16,7 +16,7 @@
        "dom", // tsconfig의 lib옵션을 주석처리하기 전에는 , 기본적으로 brower의 dom이 인식되지만, lib옵션을 활성화했다면 browser와 관계없이 node code로 작성할 수 있게 되므로, dom옵션을 넣어줘야한다.
        "es6", // lib을 활성화했다면, ,global(자바스크립트 전역)에서 es6 옵션을 사용기위해 추가해줘야함.
        "dom.iterable", // lib을 활성화했고, browser를 이용한다면, 필요할거다.
-       "ScriptHost", // lib을 활성화했고, browser를 이용한다면, 필요할거다.
+       "scriptHost", // lib을 활성화했고, browser를 이용한다면, 필요할거다.
      ],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
      "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */

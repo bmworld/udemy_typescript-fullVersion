@@ -62,7 +62,7 @@ module.exports = {
       // # loader는 webpack에게 특정 '파일'을 어떻게 다룰지를 전달해주는 package.
       {
         // # webapck에게 이 rule을 적용시킬 파일을 점검하기 위한  "파일 선택조건(test)"을 명시한다.
-        test:/\.ts$/, // # test step 1. webpack에게 .ts로 끝나는 파일을 점검하도록한다.
+        test:/\.tsx?$/, // # test step 1. webpack에게 .ts로 끝나는 파일을 점검하도록한다.
         use: 'ts-loader', // # test step 2. webpack에게 test조건에 부합하는 파일이 ts-loader로 처리하도록 명시함.
         // ! => ts-loader는 자동적으로 tsconfig.json파일을 고려한다.
         //  ㄴ 그래서, 추가적인 명시를 하지 않아도 되는거다.

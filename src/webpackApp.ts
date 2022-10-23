@@ -1,5 +1,7 @@
 import _ from "lodash";
 import { Product } from "./3rdPartyLibs/product.model";
+
+
 // @ts-ignore
 // import "reflect-metadata"; // ! 해당 패키지는 ERROR발생함
 // import { plainToClass } from "class-transformer"; // ! 해당 패키지는 ERROR발생함
@@ -57,5 +59,3 @@ for (const prod of loadedProducts) {
   console.log('=> ',prod.getInformation());
 }
 
-
-// console.log(isNotEmpty())

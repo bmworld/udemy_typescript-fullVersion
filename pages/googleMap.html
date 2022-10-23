@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>EXAMPLE: Google Maps 3rd Party Library</title>
+    <link rel="stylesheet" href="/src/style/default.css" />
+    <link rel="stylesheet" href="/src/examples/googleMap/googleMap.css" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzRGOHHubNK_N7Cn6d6j6G6Yha0NFC8wU&v=weekly"
+      async
+      defer
+    ></script>
+    <script src="/distByWebpack/googleMapBundle.js" defer></script>
+  </head>
+  <body>
+    <h2>Udemy TypeScript</h2>
+    <h3>Example : Google map with TS</h3>
+    <section class="btn-section">
+      <a href="/">Page: 홈</a>
+    </section>
+    <ul>
+      <li>
+        <p><b>프로젝트 setting</b></p>
+        <p>- $ npm run build-google</p>
+        <p>
+          - webpack.config.google.js (**package.json에서 실행되는 webpack
+          config)
+        </p>
+      </li>
+      <br />
+      <br />
+      <li>
+        <b>3rd Party Libraries</b>
+        <p>- HTTP Request</p>
+        <p>- Google Map APi</p>
+      </li>
+    </ul>
+    <br />
+    <hr />
+    <section id="map-container">
+      <div id="map">
+        <p class="title">Please enter an Address!</p>
+      </div>
+      <br />
+      <form>
+        <input type="text" id="address" placeholder="enter address!" />
+        <button type="submit">Search Address</button>
+      </form>
+    </section>
+  </body>
+</html>
