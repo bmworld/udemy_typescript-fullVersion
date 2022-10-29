@@ -125,6 +125,6 @@
   ],
   "exclude": [
     "node_modules", // would be theh default 기본으로 제외돼어있을 것이.
-    "**/*.dev.ts"
+    "**/*.dev.ts",
   ] /* - 'build'에서 제외시킬 파일*/
 }
